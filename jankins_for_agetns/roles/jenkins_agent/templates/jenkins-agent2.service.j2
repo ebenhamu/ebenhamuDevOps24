@@ -1,0 +1,13 @@
+[Unit]
+Description=Jenkins Agent 2
+After=network.target
+
+[Service]
+Type=simple
+User=jenkins
+WorkingDirectory=/home/jenkins
+ExecStart=/usr/bin/java -jar /home/jenkins/agent.jar -jnlpUrl http://your-jenkins-server/computer/agent2/slave-agent.jnlp -secret your-agent2-secret
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

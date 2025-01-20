@@ -1,0 +1,13 @@
+.
+├── ansible.cfg
+├── inventory
+├── playbook.yml
+└── roles
+    └── jenkins_agent
+        ├── tasks
+        │   └── main.yml
+        ├── templates
+        │   ├── jenkins-agent1.service.j2
+        │   └── jenkins-agent2.service.j2
+        └── vars
+            └── main.yml

@@ -1,0 +1,45 @@
+- name: Ensure Jenkins agent directory exists
+  file:
+    path: /home/jenkins
+    state: directory
+    owner: jenkins
+    group: jenkins
+
+- name: Upload Jenkins agent JAR file
+  copy:
+    src: /path/to/agent.jar
+    dest: /home/jenkins/agent.jar
+    owner: jenkins
+    group: jenkins
+    mode: '0755'
+
+- name: Configure Jenkins Agent 1 systemd service
+  template:
+    src: jenkins-agent1.service.j2
+    dest: /etc/systemd/system/jenkins-agent1.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure Jenkins Agent 2 systemd service
+  template:
+    src: jenkins-agent2.service.j2
+    dest: /etc/systemd/system/jenkins-agent2.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+
+- name: Enable Jenkins Agent 1 service
+  systemd:
+    name: jenkins-agent1
+    enabled: yes
+    state: started
+
+- name: Enable Jenkins Agent 2 service
+  systemd:
+    name: jenkins-agent2
+    enabled: yes
+    state: started

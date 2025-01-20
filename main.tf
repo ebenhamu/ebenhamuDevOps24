@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 # Define the first EC2 instance resource
-resource "aws_instance" "Nordic_jenkins" {
+resource "aws_instance" "Monithor_jenkins" {
   ami             = "ami-05d38da78ce859165"
   instance_type   = "t2.micro"
   vpc_security_group_ids = ["sg-02b3d29bdcd49a0cc"]
@@ -26,7 +26,7 @@ resource "aws_instance" "Nordic_jenkins" {
 }
 
 # Define the second EC2 instance resource
-resource "aws_instance" "Nordic_docker_agent" {
+resource "aws_instance" "Monithor_docker_agent" {
   ami             = "ami-05d38da78ce859165"
   instance_type   = "t2.micro"
   vpc_security_group_ids = ["sg-02b3d29bdcd49a0cc"]
@@ -39,7 +39,7 @@ resource "aws_instance" "Nordic_docker_agent" {
 }
 
 # Define the second EC2 instance resource
-resource "aws_instance" "Nordic_ansible_agent" {
+resource "aws_instance" "Monithor_ansible_agent" {
   ami             = "ami-05d38da78ce859165"
   instance_type   = "t2.micro"
   vpc_security_group_ids = ["sg-02b3d29bdcd49a0cc"]
@@ -52,7 +52,7 @@ resource "aws_instance" "Nordic_ansible_agent" {
 }
 
 # Define the second EC2 instance resource
-resource "aws_instance" "Nordic_prod1" {
+resource "aws_instance" "Monithor_prod1" {
   ami             = "ami-05d38da78ce859165"
   instance_type   = "t2.micro"
   vpc_security_group_ids = ["sg-02b3d29bdcd49a0cc"]
@@ -66,7 +66,7 @@ resource "aws_instance" "Nordic_prod1" {
 }
 
 # Define the second EC2 instance resource
-resource "aws_instance" "Nordic_prod2" {
+resource "aws_instance" "Monithor_prod2" {
   ami             = "ami-05d38da78ce859165"
   instance_type   = "t2.micro"
   vpc_security_group_ids = ["sg-02b3d29bdcd49a0cc"]
@@ -123,7 +123,7 @@ resource "aws_lb_listener" "http" {
 }
 
 # Define the target group for the EC2 instances
-resource "aws_lb_target_group" "Nordic_prod" {
+resource "aws_lb_target_group" "Monithor_prod" {
   name     = "app-target-group"
   port     = 8080
   protocol = "HTTP"
@@ -148,22 +148,22 @@ resource "aws_lb_target_group" "Nordic_prod" {
 
 locals {
   prod_instances = [
-    aws_instance.Nordic_prod1.id,
-    aws_instance.Nordic_prod2.id
+    aws_instance.Monithor_prod1.id,
+    aws_instance.Monithor_prod2.id
   ]
 }
 
 # Attach the first EC2 instance to the target group
-resource "aws_lb_target_group_attachment" "Nordic_prod" {
+resource "aws_lb_target_group_attachment" "Monithor_prod" {
   count = length(local.prod_instances)  
-  target_group_arn = aws_lb_target_group.Nordic_prod.arn
+  target_group_arn = aws_lb_target_group.Monithor_prod.arn
   target_id        = local.prod_instances[count.index]
   port             = 8080
 }
 
 
 # Define the listener rule to forward traffic to the target group
-resource "aws_lb_listener_rule" "Nordic_prod" {
+resource "aws_lb_listener_rule" "Monithor_prod" {
   listener_arn = aws_lb_listener.http.arn
   priority     = 100
 
@@ -175,38 +175,38 @@ resource "aws_lb_listener_rule" "Nordic_prod" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.Nordic_prod.arn
+    target_group_arn = aws_lb_target_group.Monithor_prod.arn
   }
 }
 
 # Output the public IP address of the first instance
-output "Nordic_jenkins_public_ip" {
+output "Monithor_jenkins_public_ip" {
   description = "The public IP address of instance jenkins"
-  value       = aws_instance.Nordic_jenkins.public_ip
+  value       = aws_instance.Monithor_jenkins.public_ip
 }
 
 # Output the public IP address of the second instance
-output "Nordic_docker_agent_public_ip" {
+output "Monithor_docker_agent_public_ip" {
   description = "The public IP address of instance docker agent"
-  value       = aws_instance.Nordic_docker_agent.public_ip
+  value       = aws_instance.Monithor_docker_agent.public_ip
 }
 
 # Output the public IP address of the second instance
-output "Nordic_ansible_agent_public_ip" {
+output "Monithor_ansible_agent_public_ip" {
   description = "The public IP address of instance ansible agent"
-  value       = aws_instance.Nordic_ansible_agent.public_ip
+  value       = aws_instance.Monithor_ansible_agent.public_ip
 }
 
 # Output the public IP address of the second instance
-output "Nordic_prod1_public_ip" {
+output "Monithor_prod1_public_ip" {
   description = "The public IP address of instance prod1"
-  value       = aws_instance.Nordic_prod1.public_ip
+  value       = aws_instance.Monithor_prod1.public_ip
 }
 
 # Output the public IP address of the second instance
-output "Nordic_prod2_public_ip" {
+output "Monithor_prod2_public_ip" {
   description = "The public IP address of instance prod2"
-  value       = aws_instance.Nordic_prod2.public_ip
+  value       = aws_instance.Monithor_prod2.public_ip
 }
 
 # Output the DNS name of the load balancer
